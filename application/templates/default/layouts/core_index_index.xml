@@ -2,9 +2,9 @@
 <layout>
 	<container cssClass="row">
 		<container cssClass="col-md-8">
-			<widget module="panel" name="site" load="php">
+			<!-- <widget module="panel" name="site" load="php">
 				<title><![CDATA[OpenStore]]></title>
-			</widget>
+			</widget> -->
 			<defaultOutput />
 			<widget module="news" name="newest" load="php">
 				<title><![CDATA[Latest articles]]></title>

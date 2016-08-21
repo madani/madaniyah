@@ -1,0 +1,37 @@
+<?php $this->headTitle('Alphabet Tag - ' . $this->alphabet); ?>
+<div class="row">
+	<div class="col-md-8">
+		<ul class="breadcrumb">
+			<li><a href="<?php echo $this->baseUrl(); ?>">Home</a></li>
+			<li><a href="<?php echo $this->url([],'tag_tag_list'); ?>">Tag</a></li>
+			<li><a href="<?php echo $this->url(['alpha' => $this->alphabet],'tag_tag_alpha'); ?>"><?php echo strtoupper($this->alphabet); ?></a></li>
+		</ul>
+		<h5 class="text-muted"><?php echo $this->helperLoader('news')->dtoday(); ?></h5>
+		<?php if ($this->tags->getTotalItemCount() == 0) : ?>
+		<p>There is no posts</p>
+		<?php else : ?>
+		<p><?php echo sprintf('Found %s tags', '<span class="badge">' . $this->tags->getTotalItemCount() . '</span>'); ?></p>
+		<?php foreach ($this->tags as $tag) : ?>
+        <div class="panel panel-default">
+        	<div class="panel-heading">
+        		<h3 class="panel-title"><a href="<?php echo $this->url(['alpha' => $this->alphabet, 'slug' => $tag->slug_tag_text],'tag_tag_slug'); ?>">#<?php echo $tag->tag_text; ?></a></h3>
+	        </div>
+	        <div class="panel-body">
+	        	<?php echo $this->tag($tag->tag_text); ?>
+	        </div>
+        </div>
+		<?php endforeach; ?>
+
+		<div class="text-center">
+			<?php echo $this->paginationControl($this->tags,'Sliding','_partial/postpagination.phtml'); ?>
+		</div>
+		
+		<?php endif; ?>
+	</div>
+	<div class="col-md-4">
+		<h4>Kategori</h4>
+		<ul class="nav nav-pills nav-stacked">
+		<?php echo $this->helperLoader('news')->category(); ?>
+		</ul>
+	</div>
+</div>

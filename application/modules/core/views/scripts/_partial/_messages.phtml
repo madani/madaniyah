@@ -1,0 +1,11 @@
+<?php if ($this->messages) : ?>
+    <?php foreach ($this->messages as $message) : ?>
+            <div class="alert alert-block alert-info">
+                <a class="close" data-dismiss="alert" href="#" aria-hidden="true">&times;</a>
+
+                <ul style="margin-bottom: 0;">
+                   	<li><?= $message; ?></li>
+                </ul>
+            </div>
+    <?php endforeach; ?>
+<?php endif; ?>

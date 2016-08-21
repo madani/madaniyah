@@ -1,0 +1,14 @@
+<?php $user = $this->user; ?>
+<section id="profile">
+	<a href="" title="<?php printf('%s %s', $user->first_name, $user->last_name)  ?>" class="thumbnail">
+		<img src="<?php echo $user->avatar['large'] ?>" alt="<?php printf('%s %s', $user->first_name, $user->last_name)  ?>" />
+	</a>
+	<ul>	
+		<?php if ($user->gender != '') : ?>
+		<li>
+			<h3><i class="glyphicon glyphicon-heart"></i> Gender</h3>
+			<p><?php echo $user->gender ?></p>
+		</li>
+		<?php endif; ?>
+	</ul>
+</section>

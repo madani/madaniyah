@@ -1,0 +1,69 @@
+<?php if ($this->posts->getTotalItemCount() == 0) : ?>
+<p>There is no posts</p>
+<?php else : ?>
+<p><?php echo sprintf('Found %s posts', '<span class="badge">' . $this->posts->getTotalItemCount() . '</span>'); ?></p>
+<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="myModalLabel">Confirm Delete</h4>
+            </div>
+            
+			<div class="modal-body">
+				<p>Are you sure you want to delete?</p>
+			</div>
+			                
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+				<a href="#" class="btn btn-danger btn-ok">Delete</a>
+			</div>
+		</div>
+	</div>
+</div>
+<?php foreach ($this->posts as $post) : ?>
+<div class="media">
+	<?php if (isset($post->fields['images'][0]['square']['url']) && !empty($post->fields['images'][0]['square']['url'])) : ?>
+	<div class="media-left" style="padding-top:5px;">
+		<a class="pull-left" href="">
+			<img src="<?php echo $post->fields['images'][0]['square']['url']; ?>" class="media-object">
+		</a>
+	</div>
+	<?php endif; ?>
+	<div class="media-body">
+		<h4 class="media-heading"><a href="<?php echo $this->url(['slug'=>$post->slug],'news_article_details'); ?>"><?php echo $post->title; ?></a></h4>
+		<p><?php echo $this->formatting->teaser(30, $post->content); ?>...</p>
+		<div>
+			<span class="badge badge-success">Posted <?php echo date('d/m/Y H:i:s', $post->date['publish']->sec); ?></span>
+			<?php if (($this->isLoggedIn) AND ($this->getIdentity->user_name == $post->author['username'])) : ?>
+			<div class="pull-right">
+				<?php if (isset($post->allowComment)) : ?>
+				<span style="margin-right: 5px">
+					<a href=""><i class="glyphicon glyphicon-ok"></i> comment</a>
+				</span>
+				<?php endif; ?>
+				<?php if (isset($post->sticky)) : ?>
+				<span style="margin-right: 5px">
+					<a href=""><i class="glyphicon glyphicon-pushpin"></i> sticky ke-<?php echo $post->sticky; ?></a>
+				</span>
+				<?php endif; ?>
+				<span style="margin-right: 5px">
+					<a href="<?php echo $this->url(array('id'=>$post->getId()),'news_article_edit'); ?>" target="_blank">
+						<i class="glyphicon glyphicon-edit"></i> Edit
+					</a>
+				</span> 
+				<span>
+					<a href="#" data-href="<?php echo $this->url(array('id'=>$post->getId()),'news_article_delete'); ?>" data-toggle="modal" data-target="#confirm-delete">
+						<i class="glyphicon glyphicon-remove"></i> Delete
+					</a>
+				</span>
+			</div>	
+			<?php endif; ?>
+		</div>
+	</div>
+</div>
+<?php endforeach; ?>
+<div class="text-center">
+	<?php echo $this->helperLoader('news')->paginationControl($this->posts,'Sliding','_partial/postpagination.phtml'); ?>
+</div>
+<?php endif; ?>

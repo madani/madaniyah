@@ -1,0 +1,109 @@
+<?php $article = $this->article; ?>
+<?php $this->headTitle($article->title); ?>
+
+<?php
+	$this->headLink()
+		->appendStylesheet($this->APP_URL . '/js/jssocials.css')
+		->appendStylesheet($this->APP_URL . '/js/jssocials-theme-flat.css');
+
+	$this->headScript()->prependFile($this->APP_URL . '/js/jssocials.min.js'); 
+?>
+
+<?php $this->headStyle()->captureStart(); ?>
+.jssocials-share-link { border-radius: 50%; }
+.related-list-thumbs{}
+.related-list-thumbs > li{
+    margin-bottom:12px;
+}
+.related-list-thumbs > li:last-child{}
+.related-list-thumbs > li > a{
+	display:block;
+	position:relative;
+	padding: 8px;
+	border-radius:3px
+    transition:all 500ms ease-in-out;
+    border-radius:4px
+}
+.related-list-thumbs > li > a:hover{
+	box-shadow:0 2px 5px rgba(0,0,0,.3);
+	text-decoration:none
+}
+.related-list-thumbs h2{
+	bottom: 0;
+	font-size: 14px;
+	margin: 8px 0 0;
+}
+.related-list-thumbs .capcat{
+	font-size: 11px;
+}
+@media (min-width:320px) and (max-width: 480px) { 
+	.related-list-thumbs h2{
+		bottom: 0;
+		font-size: 12px;
+		height: 22px;
+		margin: 8px 0 0;
+	}
+}
+<?php $this->headStyle()->captureEnd(); ?>
+
+<?php echo $this->helperLoader('category')->breadcrumb($article->fields['category'][0]['categoryId']); ?>
+<h3><?php echo $article->title; ?></h3>
+<p>
+<?php //echo date('d/m/Y H:i:s', $article->date['publish']->sec); ?>
+<?php echo $this->dtoday(date('Y-m-d H:i:s', $article->date['publish']->sec)); ?>
+</p>
+<?php if (isset($article->origin)) : ?>
+<p><i class="glyphicon glyphicon-user"></i> <?php echo $article->origin; ?></p>
+<?php endif; ?>
+<div id="share" style="padding-bottom: 10px"></div>
+<div id="content" style="text-align: justify;"><?php echo $this->ct; ?></div>
+<div class="text-center">
+<?php
+$paginator = $this->paginationControl($this->paginator, 'Sliding','_partial/postpagination.phtml',['slug'=>$article->slug]);
+$search = ['Older','Newer'];
+$replace = ['Next','Previous'];
+$newpag = str_replace($search,$replace,$paginator);
+?>
+<?php echo $newpag; ?>
+</div>
+<hr>
+<?php //if (isset($article->fields['tags'])) : ?>
+<ul class="list-unstyled">
+	<li class="pull-left">
+		<?php
+		if (isset($article->fields['category'])) {
+			$cats = $article->fields['category']->export();
+			$out = [];
+			foreach ($cats as $cat) {
+				array_push($out, '<a href="'.$this->url(['slug'=>$cat['slug']],'category_category_detail').'" class="label label-warning">'.$cat['name'].'</a>');
+			}
+		}
+		
+		if (isset($article->fields['tags'])) :
+		$tags = $article->fields['tags']->export();
+		sort($tags); 
+		$out2 = [];
+		?>
+		<?php foreach ($tags as $tag) : ?>
+		<?php 
+		$l = strtolower(substr($tag, 0,1));
+		$tagSlug = $this->helperLoader('tag')->gtagslug($tag);
+		if ($tagSlug)
+			$link = $this->url(['alpha'=>$l,'slug'=>$tagSlug],'tag_tag_slug');
+		else
+			$link = $this->url(['alpha'=>$l],'tag_tag_alpha');
+		
+		array_push($out2, '<a href="'.$link.'" class="label label-info">'.$tag.'</a>');
+		?>
+		
+		<?php endforeach; ?>
+		<?php endif; ?>
+		
+		<p class="text-muted">This entry was posted in <?php echo implode(' ',$out); ?> <?php if (isset($out2)) { ?> and tagged <?php echo implode(' ',$out2); } ?>
+		Bookmark the <a href=""><u>permalink</u></a></p>
+	</li>
+	<li class="clearfix"></li>
+</ul>
+<?php //endif; ?>
+<?php //echo $this->gdocnp($article['_id']->{'$id'}); ?>
+<?php echo $this->gdocnp(date('Y-m-d H:i:s', $article->date['publish']->sec)); ?>

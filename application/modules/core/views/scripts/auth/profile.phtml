@@ -1,0 +1,9 @@
+<?php $user = $this->user; ?>
+<section id="wall">
+	<div id="wall-stream">
+		<h2><?php printf('%s %s', $user->first_name, $user->last_name)  ?></h2>
+		<?php if ($this->isLoggedIn) : ?>
+		<a href="<?php echo $this->url(['username'=>$user->user_name],'core_user_edit'); ?>" class="btn btn-primary icon pull-right">Edit profile</a>
+		<?php endif; ?>
+	</div>
+</section>

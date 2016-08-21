@@ -1,0 +1,7 @@
+<nav>
+<ul>
+<?php foreach ($this->posts as $post) : ?>
+<li><a href="<?php echo $this->url(array('slug'=>$post->slug),'news_article_details'); ?>"><?php echo $post->title; ?></a></li>
+<?php endforeach; ?>
+</ul>
+</nav>

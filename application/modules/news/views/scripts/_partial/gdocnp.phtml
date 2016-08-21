@@ -1,0 +1,16 @@
+<nav class="well">
+	<ul class="list-unstyled other-articles row">
+		<li class="col-sm-6 col-xs-12">
+			<a class="previous" href="<?php echo $this->url(array('slug'=>$this->leftSlug),'news_article_details'); ?>">
+				<i class="glyphicon glyphicon-chevron-left"></i>
+				<span class="title"><?php echo $this->leftTitle; ?></span>
+			</a>
+		</li>
+		<li class="col-sm-6 col-xs-12 text-right">
+			<a class="next" href="<?php echo $this->url(array('slug'=>$this->rightSlug),'news_article_details'); ?>">
+				<span class="title"><?php echo $this->rightTitle; ?></span>
+				<i class="glyphicon glyphicon-chevron-right"></i>
+			</a>
+		</li>
+    </ul>
+</nav>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE widget SYSTEM "http://schemas.madaniyah.com/dtd/widget_about.dtd">
+<widget>
+	<name>catalogbyuser</name>
+	<title>Catalog by Username</title>
+	<module>news</module>
+	<description>Show list of catalog by user</description>
+	<thumbnail></thumbnail>
+	<author>Nihki Prihadi</author>
+	<email>nihkiprihadi@gmail.com</email>
+	<version>1.0.0</version>
+	<license>free</license>
+</widget>

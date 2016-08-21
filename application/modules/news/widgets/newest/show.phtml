@@ -1,0 +1,26 @@
+<?php if ($this->posts->getTotalItemCount() == 0) : ?>
+<p>There is no posts</p>
+<?php else : ?>
+<p><?php echo sprintf('Found %s posts', '<span class="badge">' . $this->posts->getTotalItemCount() . '</span>'); ?></p>
+<?php foreach ($this->posts as $post) : ?>
+<div class="media">
+	<?php if (isset($post[5]) && !empty($post[5])) : ?>
+	<div class="media-left" style="padding-top:5px;">
+		<a class="pull-left" href="">
+			<img src="<?php echo $post[5]; ?>" class="media-object">
+		</a>
+	</div>
+	<?php endif; ?>
+	<div class="media-body">
+		<h4 class="media-heading news-title"><a href="<?php echo $this->url(['slug'=>$post[2]],'news_article_details'); ?>"><?php echo $post[1]; ?></a></h4>
+		<p><?php echo $post[4]; ?>...</p>
+		<div>
+			<span class="badge badge-success">Posted <?php echo $post[3]; ?></span>
+		</div>
+	</div>
+</div>
+<?php endforeach; ?>
+<div class="text-center">
+	<?php echo $this->paginationControl($this->posts,'Sliding','_partial/postpagination.phtml'); ?>
+</div>
+<?php endif; ?>

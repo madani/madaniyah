@@ -1,0 +1,24 @@
+<!DOCTYPE layout SYSTEM "http://schemas.madaniyah.com/dtd/layout.dtd">
+<layout>
+	<container cssClass="row">
+		<container cssClass="col-md-3 well">
+		    <widget module="core" name="sidprofile" load="php">
+		        <title><![CDATA[Profile Kiri]]></title>
+	            <params>
+	                <param name="user_name" type="global" />
+	            </params>
+		    </widget>
+			
+		</container>
+		<container cssClass="col-md-8">
+			<defaultOutput />	
+		    <widget module="news" name="catalogbyuser" load="php">
+		        <title><![CDATA[Catalog by User]]></title>
+	            <params>
+	                <param name="user_name" type="global" />
+	                <param name="limit"><value><![CDATA[15]]></value></param>
+	            </params>
+		    </widget>
+		</container>
+	</container>
+</layout>

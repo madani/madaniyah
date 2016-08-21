@@ -1,0 +1,14 @@
+<?php if (isset($this->next) || isset($this->previous)) : ?>
+<nav>
+	<ul class="pager">
+		<?php if (isset($this->previous) && isset($this->next)): ?>
+		<li class="previous"><a href="?page=<?php echo $this->previous; ?>">Newer</a></li>
+		<li class="next"><a href="?page=<?php echo $this->next; ?>">Older</a></li>
+		<?php elseif (isset($this->previous) && !isset($this->next)): ?>
+		<li class="previous"><a href="?page=<?php echo $this->previous; ?>">Newer</a></li>
+		<?php else : ?>
+		<li class="previous"><a href="?page=<?php echo $this->next; ?>">Older</a></li>
+		<?php endif; ?>
+	</ul>
+</nav>
+<?php endif; ?>

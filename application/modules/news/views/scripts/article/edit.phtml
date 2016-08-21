@@ -1,0 +1,584 @@
+<?php $article = $this->article; ?>
+<?php
+$this->headTitle($this->escape($article->title)); 
+$this->headLink()
+	->appendStylesheet($this->APP_STATIC_SERVER . '/js/select2.min.css')
+	->appendStylesheet($this->APP_STATIC_SERVER . '/skins/' . $this->APP_TEMPLATE . '/' . $this->APP_SKIN . '/css/bootstrap-select.min.css')
+	->appendStylesheet($this->APP_STATIC_SERVER . '/skins/' . $this->APP_TEMPLATE . '/' . $this->APP_SKIN . '/css/bootstrap-datetimepicker.css');
+$this->headScript()
+	 ->appendFile($this->APP_STATIC_SERVER . '/js/jquery/jquery.validate.min.js')
+	 ->appendFile($this->APP_STATIC_SERVER . '/js/jquery/jquery.json.min.js')
+	 ->appendFile($this->APP_STATIC_SERVER . '/js/bootstrap-select.min.js')
+	 ->appendFile($this->APP_STATIC_SERVER . '/js/select2.min.js')
+	 ->appendFile($this->APP_STATIC_SERVER . '/js/moment.js')
+	 ->appendFile($this->APP_STATIC_SERVER . '/js/bootstrap-datetimepicker.js');
+$this->headStyle()->appendStyle('
+	.photos { overflow: auto; border: 1px solid #444; padding: 5px; }
+	.photos li { float: left; margin-right: 10px; margin-bottom: 15px; }
+	.select2-container--default .select2-selection--multiple .select2-selection__choice {
+	    color: black;
+	}	
+');
+
+?>
+<script type="text/javascript" src="<?php echo $this->APP_URL; ?>/js/tinymce/tiny_mce.js"></script>
+<div class="row">
+	<div class="col-lg-10 col-lg-offset-2">
+		<div class="panel panel-default next-panel">
+			<div class="panel-heading">
+				<h3 class="panel-title">Edit Posting</h3>
+			</div>
+			<div class="row panel-body">
+				<form method="post" action="<?php echo $this->url(array('id'=>$article->getId()),'news_article_edit'); ?>" id="editPostForm" class="form-horizontal" role="form">
+					<div class="col-md-9">
+						<div class="form-group">
+							<label class="col-sm-2 control-label" for="title">Title</label>
+							<div class="col-sm-7">
+								<input type="text" class="form-control required" name="title" id="title" placeholder="" value="<?php echo $this->escape($article->title); ?>">
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-2"></div>
+							<div class="col-sm-3">
+								<label for="type">Type of Post</label>
+								<select class="form-control" id="type" name="type">
+									<option value="">---</option>
+									<option value="article"<?php if ('article' == $article->type) : ?> selected="selected"<?php endif; ?>>Article</option>
+									<option value="buy"<?php if ('buy' == $article->type) : ?> selected="selected"<?php endif; ?>>Dibeli</option>
+									<option value="sell"<?php if ('sell' == $article->type) : ?> selected="selected"<?php endif; ?>>Dijual</option>
+									<option value="rent"<?php if ('rent' == $article->type) : ?> selected="selected"<?php endif; ?>>Disewa</option>
+									<option value="service"<?php if ('service' == $article->type) : ?> selected="selected"<?php endif; ?>>Jasa</option>
+									<option value="clinic"<?php if ('clinic' == $article->type) : ?> selected="selected"<?php endif; ?>>Klinik</option>
+									<option value="source"<?php if ('source' == $article->type) : ?> selected="selected"<?php endif; ?>>Sumber Klinik</option>
+									<option value="author"<?php if ('author' == $article->type) : ?> selected="selected"<?php endif; ?>>Penjawab Klinik</option>
+								</select>
+							</div>
+							<div class="col-sm-3">
+								<label for="category">Category</label>
+								<?php echo $this->categorySelect(array('id' => 'category', 'name' => 'category[]')); ?>
+							</div>
+						</div>
+						
+						<?php if ($article->type !== 'clinic') : ?>
+						<div class="form-group">
+							<label class="col-sm-2 control-label" for="condition">Condition</label>
+							<div class="col-sm-7">
+								<label class="checkbox-inline">
+									<input type="checkbox" name="condition" value="new" <?php if ('new' == $article->condition) : ?>checked<?php endif; ?>>New
+								</label>
+								<label class="checkbox-inline">
+									<input type="checkbox" name="condition" value="second" <?php if ('second' == $article->condition) : ?>checked<?php endif; ?>>Second
+								</label>
+								<label class="checkbox-inline">
+									<input type="checkbox" name="condition" value="refurbish" <?php if ('refurbish' == $article->condition) : ?>checked<?php endif; ?>>Refurbished
+								</label>
+		    				</div>
+						</div>
+						<?php endif; ?>
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label" for="price">Price</label>
+							<div class="col-sm-3">
+								<div class="input-group">
+									<span class="input-group-addon">Rp</span>
+			                		<input type="text" name="price" id="price" placeholder="" class="form-control" value="<?php echo $article->price; ?>">
+		                		</div>
+							</div>
+						</div>
+						
+						<?php if ($article->type == 'clinic') : ?>
+						<div class="form-group">
+							<label class="col-sm-2 control-label" for="question">Question</label>
+							<div class="col-sm-7">
+								<textarea class="form-control" id="question" name="question" maxlength="255" placeholder="Pertanyaan" rows="3"><?php echo $article->question; ?></textarea>
+							</div>
+						</div>
+						<?php endif; ?>
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label" for="content"><?php if ($article->type == 'clinic') : ?>Answer<?php else : ?>Content<?php endif; ?></label>
+							<div class="col-sm-7">
+								<textarea name="content" id="content" class="tinymce" rows="10"><?php echo $article->content; ?></textarea>
+							</div>
+						</div>
+						
+						<?php if (in_array($article->type, ['clinic','author'])) : ?>
+						<div class="form-group">
+							<label class="col-sm-2 control-label" for="source">Source</label>
+							<div class="col-sm-7">
+								<?php echo $this->getSource(array('id' => 'source', 'name' => 'source[]', 'selected'=> (isset($article->source)?$article->source:''))); ?>
+							</div>
+						</div>
+						<?php endif; ?>
+						
+						<?php if ($article->type == 'clinic') : ?>
+						<div class="form-group">
+							<label class="col-sm-2 control-label" for="author">Author</label>
+							<div class="col-sm-7">
+								<?php echo $this->getAuthor(array('id' => 'answeredby', 'name' => 'answeredby', 'selected'=> (isset($article->answeredby)?$article->answeredby:''))); ?>
+							</div>
+						</div>
+						<?php endif; ?>
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label" for="uploadimage">Upload image</label>
+							<div class="col-sm-7">
+								<?php 
+									echo $this->helperLoader('upload')->uploader('catalog',
+										array('multi' => true, 'auto' => true, 'removeCompleted' => true, 'queueSizeLimit' => 7, 'fileSizeLimit' => 1024 * 1024 * 5),
+										array('onUploadComplete' => 'onUploadComplete'),
+										'uploadFiles'); 
+								?>
+								<p class="help-block">
+								You can select 7(seven) images to upload at the same time. 
+								Support gif/jpg/jpeg/png formats. 
+								Size of image does not exceed 200M.
+								After uploading, click on the thumbnail size to insert image to content of article.
+								</p>
+								<ul class="list-inline" id="photos">
+									<?php if (isset($article->fields['images'])) : ?>
+									<?php $imgFields = $article->fields['images']->export(); ?>
+									<?php for($n=0;$n<count($imgFields);$n++) : ?>
+									<?php 
+									$img = [];
+									foreach ($this->thumb as $t) {
+										$img[$t] = $imgFields[$n][$t];
+									} 
+									$imagesArray = json_encode($img);
+									?>
+									
+									<li>
+										<img src="<?php echo $imgFields[$n]['thumbnail']['url']; ?>" width="100" height="100" style="cursor:pointer" onclick="$.post('<?php echo $this->url([],'upload-file-delete'); ?>',{img:'<?php echo $this->escape($imagesArray);?>',id:'<?php echo $article->getId(); ?>',db:1}); $(this).closest('li').remove(); return false;">
+										<?php
+										if (isset($imgFields[$n]['title'])) 
+											$titleField = $imgFields[$n]['title'];
+										else
+											$titleField = '';
+										?>
+										<input value="<?php echo $titleField; ?>" name="filename[]" type="hidden">
+										<input value="<?php echo $this->escape($imagesArray); ?>" name="img[]" type="hidden"><br>
+										<select name="selimages" width=100>
+											<option value=''>---</option>
+											<?php foreach($this->thumb as $t) : ?>
+											<option value="<?php echo $imgFields[$n][$t]['url']; ?>" data-options="<?php echo $imgFields[$n][$t]['size']; ?>"><?php echo $imgFields[$n][$t]['size']; ?></option>
+											<?php endforeach; ?>
+											<option value='addattribute' data-options="<?php echo $imgFields[$n]['fileid']; ?>">Add Attributes</option>
+										</select>
+									</li>
+									<?php endfor; ?>
+									<?php endif; ?>
+								</ul>
+							</div>
+						</div>
+						
+						<?php if (isset($article->fields['images'])) : ?>
+						<?php 
+						$imgFields = $article->fields['images']->export();
+						$attr = $ky = [];
+						$exclude = array_merge($this->thumb,['original','slug','createdDate','createdBy']);
+						for($k=0;$k<count($imgFields);$k++) :
+						$r=0;
+						foreach($imgFields[$k] as $key => $value) :
+						if (!in_array($key, $exclude)) {
+						$attr[$k][$key] = $value;
+						$ky[$r] = $key;
+						}
+						?>
+						
+						<?php
+						$r++;
+						endforeach;
+						?>
+						<?php endfor; ?>
+						
+						<?php $g=0; foreach ($attr as $at => $v) { ?>
+						<?php
+						$indexFileId = array_search('fileid', $ky);
+						unset($ky[$indexFileId]);
+						foreach ($ky as $yu) {
+					
+						?>
+						<div class="form-group">
+						<div class="col-sm-2"></div>
+						<div class="col-sm-4">
+							<div class="input-group"><span class="input-group-addon">Attribute</span><input type="text" name="attr_<?php echo $v['fileid']; ?>[]" class="form-control" value="<?php echo $yu; ?>"></div>
+						</div>
+						<div class="col-sm-4">
+							<div class="input-group"><span class="input-group-addon">Value</span><input type="text" name="attrval_<?php echo $v['fileid']; ?>[]" class="form-control" value="<?php echo $v[$yu]; ?>"></div>
+						</div>	
+						</div>
+						<?php 
+						}
+						$g++;	
+						}
+						?>
+						
+						<?php endif; ?>
+						
+						<div id="extraattribute"></div>
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label" for="tags">Tags</label>
+							<div class="col-sm-5">
+								<input type="text" placeholder="Eg: Music, Electronics, Gadget, etc" class="form-control" name="tags" id="tags" value="<?php if (isset($article->fields['tags'])) : echo implode(',',$article->fields['tags']->export()); endif; ?>">
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label" for="locations">Location</label>
+							<div class="col-sm-5">
+								<?php echo $this->locationSelect($article->location); ?>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<div class="col-sm-offset-2 col-sm-10">
+								<div class="checkbox">
+									<label>
+										<input type="checkbox" id="terms" name="terms" <?php if ('Y' == $article->terms) : ?>checked<?php endif; ?>> I have read and accept the <a href="">Terms of Use</a>.
+									</label>
+								</div>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<div class="col-sm-offset-2 col-sm-7">
+								<input type="hidden" name="postId" value="<?php echo $article->getId(); ?>">
+								<button class="btn btn-primary" type="submit">Submit</button>
+								<button class="btn">Preview</button>
+							</div>
+						</div>
+						
+					</div>
+					<div class="col-md-3">
+						<div class="col-sm-12">
+							<div class="form-group">
+								<label>Maybe from Source</label>
+								<input type="text" class="form-control" name="typesource" id="typesource" value="<?php echo $this->escape($article->typesource); ?>">
+								<div class="col-sm-12"><small>E.g:newspaper,internet</small></div>
+							</div>
+						</div>
+						<div class="col-sm-12">
+							<div class="form-group">
+								<label>By</label>
+								<input type="text" class="form-control" name="origin" id="origin" value="<?php echo $this->escape($article->origin); ?>">
+							</div>
+						</div>
+						<div class="col-sm-12">
+							<div class="form-group">
+								<label>Modified Date</label>
+								<p><?php echo date('d-m-Y H:i:s',$article->date['update']->sec); ?></p>
+							</div>
+						</div>
+						<div class="col-sm-12">
+							<div class="form-group">
+								<label>Created Date</label>
+								<div class="input-group date" id="datetimepicker3" style="margin-top: 5px;" data-date-format="DD-MM-YYYY HH:mm:ss">
+									<?php
+									if (isset($article->date['create']->sec)) {
+										$createdDate = date('d-m-Y H:i:s',$article->date['create']->sec); 
+									}
+									else
+									{
+										$createdDate = '';
+									} 
+									?>
+								    <input type="text" class="form-control" name="createdDate" value="<?php echo $createdDate; ?>">
+								    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-12">
+							<div class="form-group">
+								<label>Published Date</label>
+								<div class="input-group date" id="datetimepicker1" style="margin-top: 5px;" data-date-format="DD-MM-YYYY HH:mm:ss">
+									<?php
+									if (isset($article->date['publish']->sec)) {
+										$publishedDate = date('d-m-Y H:i:s',$article->date['publish']->sec); 
+									}
+									else
+									{
+										$publishedDate = '';
+									} 
+									?>
+								    <input type="text" class="form-control" name="publishedDate" value="<?php echo $publishedDate; ?>">
+								    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-12">
+							<div class="form-group">
+								<label>Expired Date</label>
+								<div class="input-group date" id="datetimepicker2" style="margin-top: 5px;" data-date-format="DD-MM-YYYY HH:mm:ss">
+									<?php
+									if (isset($article->date['expire']->sec)) {
+										$expiredDate = date('d-m-Y H:i:s',$article->date['expire']->sec); 
+									}
+									else
+									{
+										$expiredDate = '';
+									} 
+									?>
+								    <input type="text" class="form-control" name="expiredDate" value="<?php echo $expiredDate; ?>">
+								    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-12">
+							<div class="form-group">
+								<label>Status</label>
+								<?php echo $this->catalogStatus($article->status); ?>
+							</div>
+						</div>
+						<div class="col-sm-12">
+							<div class="form-group">
+								<label>No. Sticky</label>
+	          					<input type="text" size="1" name="sticky" value="<?php echo $article->sticky; ?>" style="text-align:center">
+							</div>
+						</div>
+						<div class="col-sm-12">
+							<div class="form-group">
+								<div class="checkbox">
+									<label>
+										<input type="checkbox" name="allowComment" <?php if ('Y' == $article->allowComment) : ?>checked<?php endif; ?>> Allow Comment
+									</label>
+								</div>
+							</div>
+						</div>
+						
+					</div>
+					
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+<!--
+function onUploadComplete(fileObj,response)
+{
+	var images = $.evalJSON(response);
+	var presentImage = $('<img/>');
+	$(presentImage).attr('src', images.thumbnail.url)
+		.attr('width', '100').attr('height', '100')
+		.attr('style', 'cursor: pointer')
+		.click(function() {
+			$('#uploadFiles').uploadifive('cancel', $.post('<?php echo $this->url([],'upload-file-delete'); ?>',{img:$.toJSON(images)}));
+			$(this).closest('li').remove();			
+		});
+	var select = $('<select/>');
+	$(select).attr('width', '100');
+	$('<option/>').attr('value', '').html('---').appendTo(select);
+
+	for (var thumb in images) {
+		$('<option/>').attr('value', images[thumb].url)
+		.attr('data-options',images[thumb].size).html(images[thumb].size).appendTo(select);
+	}	
+	$(select).change(function() {
+		if ($(this).val() != '') {
+			insertImage($(this).val(), $(this).find('option:selected').data('options'));
+		}
+	});
+	
+	$('<li/>').append(presentImage)
+	.append($('<input/>').attr('type', 'hidden').attr('name','filename[]').val(fileObj.name))
+	.append($('<input/>').attr('type', 'hidden').attr('name','img[]').val($.toJSON(images)))
+	.append($('<br/>')).append(select).appendTo($('#photos'));
+}
+
+$('select[name=selimages]').change(function() {
+	if ($(this).val() != '') {
+		if ($(this).val() == 'addattribute') {
+			addFormAttribute($(this).find('option:selected').data('options'));
+		}
+		else
+			insertImage($(this).val(), $(this).find('option:selected').data('options'));
+	}
+	
+	return false;
+});
+
+/**
+ * Insert image to TinyMCE editor at current position
+ * @param string url The image url
+ */
+function insertImage(url,size) {
+	var s = size.split('x');
+	//console.info(s[0]);
+	tinyMCE.getInstanceById('content').execCommand('mceInsertContent', false, '<img src="' + url + '" class="img-responsive" />');
+};
+
+function addFormAttribute(fileId)
+{
+	//console.info(fileId);
+	$('#extraattribute').append("<div class='form-group'>"+
+	"<div class='col-sm-2'></div>"+	
+	"<div class='col-sm-4'>"+
+	"<div class='input-group'><span class='input-group-addon'>Attribute</span><input type='text' name='attr_" + fileId + "[]' class='form-control' placeholder='Contoh: Warna'></div>"+
+	"</div>"+
+	"<div class='col-sm-4'>"+
+	"<div class='input-group'><span class='input-group-addon'>Value</span><input type='text' name='attrval_" + fileId + "[]' class='form-control' placeholder='Contoh: Biru'></div>"+
+	"</div>"+
+	"</div>");
+}
+
+/**
+ * Init TinyMCE instances
+ */
+tinyMCE.init({
+	theme: 'advanced',
+	plugins: 'safari,spellchecker,pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template,preelementfix',
+	theme_advanced_buttons1: 'bold,italic,underline,|,justifyleft,justifycenter,justifyright,justifyfull,|,bullist,numlist,outdent,indent,ltr,rtl,blockquote,|,forecolor,backcolor,fontselect,fontsizeselect',
+	theme_advanced_buttons2: 'link,unlink,table,|,emotions,charmap,image,media,|,code,search,undo,redo,|,preview,fullscreen',
+	theme_advanced_buttons3: '',
+	theme_advanced_toolbar_location: 'top',
+	theme_advanced_toolbar_align: 'left',
+	extended_valid_elements: 'font[face|size|color|style],span[id|class|align|style],figure[width|style|class|align|id],figcaption[style|class]',
+	width: '480',
+	mode: 'textareas',
+	elements: 'content',
+	content_css: '',
+	relative_urls: false,
+	remove_script_host: false,
+	paste_remove_styles: true,
+    paste_auto_cleanup_on_paste : true,
+    force_br_newlines : true,
+    forced_root_block : false,
+    force_p_newlines : false,
+	onchange_callback: function(editor) {
+		tinyMCE.triggerSave();
+		$('#' + editor.id).valid();
+	}
+});
+
+$(document).ready(function() {
+	$('#editPostForm').validate({
+		rules: {
+			title: {
+				required:true,
+				remote:{
+					url:"<?php echo $this->url([],'news_article_checkslug'); ?>",
+					data:{id:'<?php echo $article->getId(); ?>'},
+					type:"post"
+				}
+			},
+			price: {
+				number:true
+			},
+			terms: "required"
+		},
+		messages: {
+			terms: " "
+		},
+		highlight: function(element) {
+            $(element).closest('.form-group').addClass('has-error');
+        },
+        unhighlight: function(element) {
+            $(element).closest('.form-group').removeClass('has-error');
+        },
+        errorElement: 'span',
+        errorClass: 'help-block',
+        errorPlacement: function(error, element) {
+        	if(element.is(':checkbox')) {
+        		error.appendTo(element.next());
+        	}
+            else if(element.parent('.input-group').length) {
+                error.insertAfter(element.parent());
+            } else {
+                error.insertAfter(element);
+            }
+        }
+	});
+
+	$('#<?php echo $this->uploadElementId; ?>').uploadifive({
+		'formData' : {
+			mod: "<?php echo $this->module; ?>"
+			<?php if (isset($this->options['thumbnails'])) : ?>, 
+			thumbnails: "<?php echo $this->options['thumbnails']; ?>"
+			<?php endif; ?>
+		},
+		//'queueID' : 'queue',
+		'fileType' : ['image/png','image/jpg','image/jpeg','image/gif'],
+		'queueSizeLimit' : '<?php echo $this->options['queueSizeLimit']; ?>',
+		'fileSizeLimit': '<?php echo $this->options['fileSizeLimit']; ?>',
+		'removeCompleted' : <?php if (isset($this->options['removeCompleted']) && ($this->options['removeCompleted'] == true)) : ?>true<?php else : ?>false<?php endif; ?>,
+		'auto': <?php if (isset($this->options['auto']) && ($this->options['auto'] == true)) : ?>true<?php else : ?>false<?php endif; ?>,
+		'multi': <?php if (isset($this->options['multi']) && ($this->options['multi'] == true)) : ?>true<?php else : ?>false<?php endif; ?>,
+		'uploadScript' : '<?php echo $this->url([],'upload_file_upload'); ?>',
+		<?php if (isset($this->handlers['onError'])) : ?>
+		'onError': function(errorType) {
+			
+			<?php echo $this->handlers['onError']; ?>(errorType);
+			 
+		}, 
+		<?php endif; ?>
+		<?php if (isset($this->handlers['onCancel'])) : ?>
+		'onCancel': function() {
+			 
+			<?php echo $this->handlers['onCancel']; ?>();
+			 
+		}, 
+		<?php endif; ?>
+		<?php if (isset($this->handlers['onClearQueue'])) : ?>
+		'onClearQueue': function(queue) {
+			
+			<?php echo $this->handlers['onClearQueue']; ?>(queue);
+			 
+		},
+		<?php endif; ?>
+		<?php if (isset($this->handlers['onProgress'])) : ?>
+		onProgress: function(file, e) {
+			
+			<?php echo $this->handlers['onProgress']; ?>(file, e);
+			 
+		},
+		<?php endif; ?>
+		<?php if (isset($this->handlers['onUploadComplete'])) : ?>
+		'onUploadComplete' : function(file, data) { 
+			
+			<?php echo $this->handlers['onUploadComplete']; ?>(file, data);
+			 
+		},
+		<?php endif; ?>
+		<?php if ($this->options['queueSizeLimit'] > 0) : ?>
+		'onSelect' : function(queue) {
+			var i = $(".img-thumbnail").size(),
+				x = '<?php echo $this->options['queueSizeLimit'] - 1; ?>';
+				
+            if (i > x)
+            {
+            	$('#<?php echo $this->uploadElementId; ?>').uploadifive('clearQueue');
+            	alert('The maximum number of items has been reached(7)');
+            }
+        },
+        <?php endif; ?>
+		'onFallback': function(){
+     		alert('HTML5 is not supported in this browser. Please upgrade your browser');
+    	}
+	
+	});
+	
+	$('#datetimepicker1').datetimepicker({
+		pick12HourFormat: false,
+		sideBySide: true
+    });
+	$('#datetimepicker2').datetimepicker({
+		pick12HourFormat: false,
+		sideBySide: true
+    });
+	$('#datetimepicker3').datetimepicker({
+		pick12HourFormat: false,
+		sideBySide: true
+    });
+    $('.selectpicker').selectpicker();
+	
+	<?php if ($article->type == 'clinic') : ?>
+	$('#type option[value!=clinic]').attr('disabled', true);
+	<?php endif; ?>
+	
+	<?php if ($article->type !== 'clinic') : ?>
+	$('#type option[value=clinic]').attr('disabled', true);
+	<?php endif; ?>
+});
+//-->
+</script>

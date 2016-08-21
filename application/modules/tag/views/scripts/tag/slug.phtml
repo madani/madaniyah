@@ -1,0 +1,43 @@
+<?php $this->headTitle('Tag - ' . $this->tagtitle); ?>
+<div class="row">
+	<div class="col-md-8">
+		<ul class="breadcrumb">
+			<li><a href="<?php echo $this->baseUrl(); ?>">Home</a></li>
+			<li><a href="<?php echo $this->url([],'tag_tag_list'); ?>">Tag</a></li>
+			<li><a href="<?php echo $this->url(['alpha' => $this->alphabet],'tag_tag_alpha'); ?>"><?php echo strtoupper($this->alphabet); ?></a></li>
+			<li><a href="<?php echo $this->url(['alpha' => $this->alphabet, 'slug' => $this->tagslug],'tag_tag_slug'); ?>"><?php echo strtoupper($this->tagtitle); ?></a></li>
+		</ul>
+		<h5 class="text-muted"><?php echo $this->helperLoader('news')->dtoday(); ?></h5>
+		<h4>#<?php echo $this->tagtitle; ?></h4>
+		<?php if ($this->posts->getTotalItemCount() == 0) : ?>
+		<p>There is no posts</p>
+		<?php else : ?>
+		<p><?php echo sprintf('Found %s posts', '<span class="badge">' . $this->posts->getTotalItemCount() . '</span>'); ?></p>
+		<?php foreach ($this->posts as $post) : ?>
+		<h4><a href="<?php echo $this->url(array('slug'=>$post->slug),'news_article_details'); ?>"><?php echo $post->title; ?></a></h4>
+		<p><?php echo $this->formatting->teaser(30, $post->content); ?>...</p>
+        <div>
+        	<?php 
+        	if (isset($post->date['publish']) && !empty($post->date['publish']) && $post->date['publish'] !== "0000-00-00 00:00:00") :
+        		$datePub = $post->date['publish']->sec;
+        	else :
+        		$datePub = $post->date['create']->sec;
+        	endif;  
+        	?>
+        	<span class="badge badge-success">Posted <?php echo date('d/m/Y H:i:s', $datePub); ?></span>
+        </div>
+		
+		<?php endforeach; ?>
+		<div class="text-center">
+			<?php echo $this->paginationControl($this->posts,'Sliding','_partial/postpagination.phtml'); ?>
+		</div>
+		
+		<?php endif; ?>	
+	</div>
+	<div class="col-md-4">
+		<h4>Kategori</h4>
+		<ul class="nav nav-pills nav-stacked">
+		<?php echo $this->category(); ?>
+		</ul>
+	</div>
+</div>

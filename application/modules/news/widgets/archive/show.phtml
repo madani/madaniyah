@@ -1,0 +1,28 @@
+<?php if (count($this->archives) > 0) : ?>
+<div class="row m0 sidebar sidebar-category">
+	<h4 class="sidebar-title">Archives</h4>
+	<ul class="nav nav-pills nav-stacked">
+		<?php $lang['months'] = array("Januari","Februari","Maret","April","May","Juni","Juli","Agustus","September","Oktober","November","Desember"); ?>
+		<?php foreach ($this->archives as $arc) : ?>
+		<?php
+		$month = $arc['_id']['month'];
+		if($month < 10) 
+			$m = '0' . $month;
+		else
+			$m = $month;
+		
+			
+		?>
+		<li<?php if ($this->layout()->getArch == $arc['_id']['year'].'-'.$m) { ?> class="active"<?php } ?>>
+			<a href="<?php echo $this->APP_STATIC_SERVER; ?>/<?php echo $arc['_id']['year']; ?>/<?php echo $m; ?>/">
+			<?php 
+			echo $lang['months'][$month-1].' '.$arc['_id']['year']; 
+			?>
+			<span class="badge"><?php echo $arc['total']; ?></span>
+			</a>
+			
+		</li>
+		<?php endforeach; ?>
+	</ul>
+</div>
+<?php endif; ?>

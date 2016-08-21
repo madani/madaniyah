@@ -1,0 +1,28 @@
+<!DOCTYPE layout SYSTEM "http://schemas.madaniyah.com/dtd/layout.dtd">
+<layout>
+	<container cssClass="row">
+		<container cssClass="col-md-8">
+			<widget module="panel" name="site" load="php">
+				<title><![CDATA[OpenStore]]></title>
+			</widget>
+			<defaultOutput />
+			<widget module="news" name="newest" load="php">
+				<title><![CDATA[Latest articles]]></title>
+				<params>
+                    <param name="limit"><value><![CDATA[15]]></value></param>
+                </params>
+			</widget>
+		</container>
+		<container cssClass="col-md-4">
+			<widget module="news" name="category" load="php">
+				<title><![CDATA[Category]]></title>
+			</widget>
+			<widget module="news" name="archive" load="php">
+				<title><![CDATA[Archive]]></title>
+			</widget>
+			<widget module="news" name="praytime" load="php">
+				<title><![CDATA[PrayTime]]></title>
+			</widget>
+		</container>
+	</container>
+</layout>

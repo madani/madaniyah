@@ -1,0 +1,61 @@
+<?php if (isset($this->prayTime) && !empty($this->prayTime)) : ?>
+<?php echo $this->doctype(); ?>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<?php echo $this->headTitle('Jadwal Shalat'); ?>
+	<?php echo $this->headMeta()
+    	->appendName('viewport', 'width=device-width, initial-scale=1.0')
+    	->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
+	?>
+	
+	<!--Fonts-->
+    <link href='https://fonts.googleapis.com/css?family=Karla:400,400italic,700italic,700' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
+	
+    <?php $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->baseUrl() . '/favicon.ico'))
+    	->prependStylesheet($this->APP_STATIC_SERVER . '/skins/' . $this->APP_TEMPLATE . '/' . $this->APP_SKIN . '/css/font-awesome.min.css')
+        ->prependStylesheet($this->APP_STATIC_SERVER . '/skins/' . $this->APP_TEMPLATE . '/' . $this->APP_SKIN . '/css/bootstrap-theme.min.css')
+		->prependStylesheet($this->APP_STATIC_SERVER . '/skins/' . $this->APP_TEMPLATE . '/' . $this->APP_SKIN . '/css/bootstrap.min.css') ?>
+	<?php echo $this->headLink(); ?>	
+	
+	<style type="text/css">
+	body p {
+	    font-family: "Karla", sans-serif
+	}
+	.sidebar-title {
+	    font: 700 16px/1 "Montserrat", sans-serif;
+	}
+    </style>
+</head>
+<body>
+<h4 class="sidebar-title">Jadwal Shalat</h4>
+<div class="table-responsive">
+<table class="table">
+	<tbody>
+	<?php foreach ($this->prayTime as $key => $value) : ?>
+	<tr>
+		<td><?php echo $key; ?>:</td>
+		<td><?php echo $value; ?></td>
+	</tr>
+	<?php endforeach; ?>
+	</tbody>
+</table>
+</div>
+<form action="" method="post" class="form-horizontal">
+<?php echo $this->citySelect($this->selectedCity); ?>
+</form>
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-6078961-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+</body>
+</html>
+<?php endif; ?>

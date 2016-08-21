@@ -1,0 +1,105 @@
+<?php $this->headTitle('Edit profile'); ?>
+<?php $user = $this->user; ?>
+<form class="form-horizontal" method="POST" action="">
+	<fieldset>
+		<legend>PERSONAL DATA</legend>
+	</fieldset>
+	<div class="form-group">
+		<label class="col-sm-2 control-label">Username</label>
+		<div class="col-sm-4">
+			<input type="text" name="user_name" class="form-control" disabled value="<?= $this->escape($user->user_name); ?>" />
+		</div>
+	</div>
+	
+	<div class="form-group">
+		<label class="col-sm-2 control-label">Email</label>
+		<div class="col-sm-4">
+			<input type="text" name="email" class="form-control" disabled value="<?= $this->escape($user->email); ?>" />
+		</div>
+		<div class="col-sm-10 col-sm-offset-2"><small>We do not share your email address with anyone</small></div>		
+	</div>
+	
+	<div class="form-group">
+		<label class="col-sm-2 control-label">Full name</label>
+		<div class="col-sm-4">
+			<input type="text" name="first_name" class="form-control" value="<?= $this->escape($user->first_name); ?>" placeholder="First name" />
+		</div>
+		<div class="col-sm-4">
+        	<input type="text" name="last_name" class="form-control" value="<?= $this->escape($user->last_name); ?>" placeholder="Last name" />
+		</div>
+	</div>
+	
+	<div class="form-group">
+		<label class="col-sm-2 control-label">Website</label>
+		<div class="col-sm-4">
+        	<input type="text" name="website" class="form-control" value="<?= $this->escape($user->website); ?>" />
+		</div>
+	</div>	
+	
+	<div class="form-group">
+		<label class="col-sm-2 control-label">Bio</label>
+		<div class="col-sm-6">
+        	<textarea name="bio" rows="5" class="form-control"><?= $this->escape($user->bio); ?></textarea>
+		</div>
+	</div>
+	
+	<div class="form-group">
+		<label class="col-sm-2 control-label">Gender</label>
+		<div class="col-sm-2">
+			<select name="gender" class="form-control">
+				<option value="male" <?php if ('male' == $user->gender) : ?>selected="selected"<?php endif; ?>>Male</option>
+				<option value="female" <?php if ('female' == $user->gender) : ?>selected="selected"<?php endif; ?>>Female</option>
+			</select>
+		</div>
+	</div>
+	
+	<div class="form-group">
+		<?php
+			$birthday = ($user->birthday instanceof MongoDate) ? date('m/d/Y', $user->birthday->sec) : date('m/d/Y');
+			list($month, $day, $year) = explode('/', $birthday);
+		?>
+		<label class="col-sm-2 control-label">Birthday</label>
+		<div class="col-sm-2">
+			<select name="month" class="form-control">
+            	<option value="" disabled>Month</option>
+                <?php $lang['months'] = array("January","February","March","April","May","June","July","August","September","October","November","December"); ?>
+                <?php for ($i = 1; $i <= 12; $i++) : ?>
+                <option value="<?= $i; ?>" <?php if ($month == $i) : ?>selected<?php endif; ?>><?= $lang['months'][$i-1]; ?></option>
+                <?php endfor; ?>
+			</select>
+		</div>
+		<div class="col-sm-2">
+			<select name="day" class="form-control">
+				<option value="" disabled>Day</option>
+                <?php for ($i = 1; $i <= 31; $i++) : ?>
+                <option value="<?= $i; ?>" <?php if ($day == $i) : ?>selected<?php endif; ?>><?= $i; ?></option>
+                <?php endfor; ?>
+        	</select>
+		</div>
+		<div class="col-sm-2">
+			<select name="year" class="form-control">
+				<option value="" disabled>Year</option>
+                <?php for ($i = date('Y') - 100; $i <= date('Y'); $i++) : ?>
+                <option value="<?= $i; ?>" <?php if ($year == $i) : ?>selected<?php endif; ?>><?= $i; ?></option>
+                <?php endfor; ?>
+            </select>
+		</div>
+	</div>
+	
+	<!-- address: -->
+	<fieldset>
+		<legend>Address</legend>
+		
+		<?= $this->address($user->address->export()); ?>
+	</fieldset>
+	<!-- :address -->
+	
+	<hr>
+	
+	<div class="form-group">
+		<div class="col-lg-10 col-lg-offset-2">
+        	<button type="submit" class="btn btn-primary">Save</button>
+		</div>
+    </div>
+
+</form>

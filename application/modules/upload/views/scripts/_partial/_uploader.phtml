@@ -1,0 +1,7 @@
+<?php 
+$this->headLink()->appendStylesheet($this->APP_STATIC_SERVER . '/skins/' . $this->APP_TEMPLATE . '/' . $this->APP_SKIN . '/css/uploadifive.css');
+$this->headScript()
+	 ->appendFile($this->APP_STATIC_SERVER . '/js/jquery/jquery.uploadifive.min.js');
+?>
+
+<input id="<?php echo $this->uploadElementId; ?>" name="uploadFile" type="file" multiple="true" class="form-control" />

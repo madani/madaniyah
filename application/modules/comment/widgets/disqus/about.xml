@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE widget SYSTEM "http://schemas.madaniyah.com/dtd/widget_about.dtd">
+<widget>
+	<name>disqus</name>
+	<title>Disqus comments</title>
+	<module>comment</module>
+	<description>Show comments powered by Disqus</description>
+	<thumbnail></thumbnail>
+	<author>Nihki Prihadi</author>
+	<email>nihkiprihadi@gmail.com</email>
+	<version>2.0.3</version>
+	<license>free</license>
+	<params>
+		<param name="username">
+			<description>Disqus username</description>
+		</param>
+	</params>
+	<resources></resources>
+</widget>

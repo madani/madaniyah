@@ -1,0 +1,6 @@
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule !\.(ico|js|gif|jpeg|jpg|png|css|swf|flv)$ index.php
+
+RewriteCond %{HTTP_HOST} ^madaniyah\.com
+RewriteRule ^(.*)$ http://www.madaniyah.com/$1 [R=permanent,L]

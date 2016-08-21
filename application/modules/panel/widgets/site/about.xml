@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE widget SYSTEM "http://schemas.madaniyah.com/dtd/widget_about.dtd">
+<widget>
+	<name>OpenStore</name>
+	<title>Open Store</title>
+	<module>panel</module>
+	<description>Show panel store</description>
+	<thumbnail></thumbnail>
+	<author>Nihki Prihadi</author>
+	<email>nihkiprihadi@gmail.com</email>
+	<version>1.0.0</version>
+	<license>free</license>
+</widget>

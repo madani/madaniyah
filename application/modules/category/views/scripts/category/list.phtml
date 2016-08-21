@@ -1,0 +1,28 @@
+<?php $this->headTitle('Kategori - ' . $this->catName); ?>
+<h5 class="text-muted"><?php echo $this->helperLoader('news')->dtoday(); ?></h5>
+<?php if ($this->posts->getTotalItemCount() == 0) : ?>
+<p>There is no posts</p>
+<?php else : ?>
+<p><?php echo sprintf('Found %s posts', '<span class="badge">' . $this->posts->getTotalItemCount() . '</span>'); ?></p>
+<?php foreach ($this->posts as $post) : ?>
+<div class="media">
+	<?php if (isset($post->fields['images'][0]['square']['url']) && !empty($post->fields['images'][0]['square']['url'])) : ?>
+	<div class="media-left" style="padding-top:5px;">
+		<a class="pull-left" href="">
+			<img src="<?php echo $post->fields['images'][0]['square']['url']; ?>" class="media-object">
+		</a>
+	</div>
+	<?php endif; ?>
+	<div class="media-body">
+		<h4 class="media-heading"><a href="<?php echo $this->url(['slug'=>$post->slug],'news_article_details'); ?>"><?php echo $post->title; ?></a></h4>
+		<p><?php echo $this->formatting->teaser(30, $post->content); ?>...</p>
+		<div>
+			<span class="badge badge-success">Posted <?php echo date('d/m/Y H:i:s', $post->date['publish']->sec); ?></span>
+		</div>
+	</div>
+</div>
+<?php endforeach; ?>
+<div class="text-center">
+	<?php echo $this->paginationControl($this->posts,'Sliding','_partial/postpagination.phtml'); ?>
+</div>
+<?php endif; ?>

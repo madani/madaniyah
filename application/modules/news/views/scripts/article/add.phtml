@@ -1,0 +1,261 @@
+<?php 
+$this->headTitle('Add New Post');
+
+$this->headLink()
+	->appendStylesheet($this->APP_STATIC_SERVER . '/js/select2.min.css')
+	->appendStylesheet($this->APP_STATIC_SERVER . '/skins/' . $this->APP_TEMPLATE . '/' . $this->APP_SKIN . '/css/bootstrap-select.min.css')
+	->appendStylesheet($this->APP_STATIC_SERVER . '/skins/' . $this->APP_TEMPLATE . '/' . $this->APP_SKIN . '/css/bootstrap-datetimepicker.css');
+
+$this->headScript()
+	->appendFile($this->APP_STATIC_SERVER . '/js/jquery/jquery.validate.min.js')
+	->appendFile($this->APP_STATIC_SERVER . '/js/jquery/jquery.json.min.js')
+	->appendFile($this->APP_STATIC_SERVER . '/js/bootstrap-select.min.js')
+	->appendFile($this->APP_STATIC_SERVER . '/js/select2.min.js')
+	->appendFile($this->APP_STATIC_SERVER . '/js/moment.js')
+	->appendFile($this->APP_STATIC_SERVER . '/js/bootstrap-datetimepicker.js');
+
+$this->headStyle()->appendStyle('
+	.photos { overflow: auto; border: 1px solid #444; padding: 5px; }
+	.photos li { float: left; margin-right: 10px; margin-bottom: 15px; }
+	.select2-container--default .select2-selection--multiple .select2-selection__choice {
+	    color: black;
+	}
+');
+
+?>
+<script type="text/javascript" src="./js/tinymce/tiny_mce.js"></script>
+<div class="row">
+	<div class="col-md-12">
+		<div class="panel panel-default next-panel">
+			<div class="panel-heading">
+				<h3 class="panel-title">Start Posting</h3>
+			</div>
+			<div class="row panel-body">
+				<form method="post" action="" id="addPostForm" class="form-horizontal" role="form">
+					<div class="col-md-9">
+						<div class="form-group">
+							<label class="col-sm-2 control-label" for="title">Title</label>
+							<div class="col-sm-7">
+								<input type="text" class="form-control required" name="title" id="title" placeholder="">
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-2"></div>
+							<div class="col-sm-3">
+								<label for="type">Type of Post</label>
+								<select class="form-control" id="type" name="type">
+									<option value="">---</option>
+									<option value="article">Article</option>
+									<option value="buy">Dibeli</option>
+									<option value="sell">Dijual</option>
+									<option value="rent">Disewa</option>
+									<option value="service">Jasa</option>
+									<option value="clinic">Klinik</option>
+									<option value="source">Sumber Klinik</option>
+									<option value="author">Penjawab Klinik</option>
+								</select>
+							</div>
+							<div id="addcategory" class="col-sm-4">
+								<label for="category">Category</label>
+								<?php echo $this->categorySelect(array('id' => 'category', 'name' => 'category[]')); ?>
+							</div>
+						</div>
+						<div id="addcopri">
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="condition">Condition</label>
+								<div class="col-sm-7">
+									<label class="checkbox-inline">
+										<input type="checkbox" name="condition" value="new">New
+									</label>
+									<label class="checkbox-inline">
+										<input type="checkbox" name="condition" value="second">Second
+									</label>
+									<label class="checkbox-inline">
+										<input type="checkbox" name="condition" value="refurbish">Refurbished
+									</label>
+			    				</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="price">Price</label>
+								<div class="col-sm-3">
+									<div class="input-group">
+										<span class="input-group-addon">Rp</span>
+				                		<input type="text" name="price" id="price" placeholder="" class="form-control">
+			                		</div>
+								</div>
+							</div>
+						</div>
+						<div id="addquestion" style="display:none">
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="question">Question</label>
+								<div class="col-sm-7">
+									<textarea class="form-control" id="question" name="question" maxlength="255" placeholder="Pertanyaan" rows="3"></textarea>
+								</div>
+							</div>
+						</div>
+						<div id="addcontent">
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="content">Content</label>
+								<div class="col-sm-7">
+									<textarea name="content" id="content" class="tinymce" rows="10"></textarea>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label" for="uploadimage">Upload image</label>
+							<div class="col-sm-7">
+								<?php 
+									echo $this->helperLoader('upload')->uploader('upload',
+										array('multi' => true, 'auto' => true, 'removeCompleted' => true, 'queueSizeLimit' => 7, 'fileSizeLimit' => 1024 * 1024 * 5),
+										array('onUploadComplete' => 'onUploadComplete'),
+										'uploadFiles'); 
+								?>
+								<p class="help-block">
+								You can select 7(seven) images to upload at the same time. 
+								Support gif/jpg/jpeg/png formats. 
+								Size of image does not exceed 200M.
+								After uploading, click on the thumbnail size to insert image to content of article.
+								</p>
+								<ul class="list-inline" id="photos"></ul>
+							
+							</div>
+							
+						</div>
+						<div id="extraattribute"></div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label" for="tags">Tags</label>
+							<div class="col-sm-5">
+								<input type="text" placeholder="Eg: Music, Electronics, Gadget, etc" class="form-control" name="tags" id="tags">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label" for="locations">Location</label>
+							<div class="col-sm-5">
+								<select name="location" id="location" class="form-control">
+									<option value="0" >Choose Location</option>
+									<option value="1" >Nanggroe Aceh Darussalam</option>
+									<option value="2" >Sumatera Utara</option>
+									<option value="3" >Sumatera Barat</option>
+									<option value="4" >Riau</option>
+									<option value="5" >Jambi</option>
+									<option value="6" >Sumatera Selatan</option>
+									<option value="7" >Bengkulu</option>
+									<option value="8" >Lampung</option>
+									<option value="9" >Kepulauan Bangka Belitung</option>
+									<option value="10" >Kepulauan Riau</option>
+									<option value="11" >DKI Jakarta</option>
+									<option value="12" >Jawa Barat</option>
+									<option value="13" >Jawa Tengah</option>
+									<option value="14" >Daerah Istimewa Yogyakarta</option>
+									<option value="15" >Jawa Timur</option>
+									<option value="16" >Banten</option>
+									<option value="17" >Bali</option>
+									<option value="18" >Nusa Tenggara Barat</option>
+									<option value="19" >Nusa Tenggara Timur</option>
+									<option value="20" >Kalimantan Barat</option>
+									<option value="21" >Kalimantan Tengah</option>
+									<option value="22" >Kalimantan Selatan</option>
+									<option value="23" >Kalimantan Timur</option>
+									<option value="24" >Sulawasi Utara</option>
+									<option value="25" >Sulawesi Tengah</option>
+									<option value="26" >Sulawesi Selatan</option>
+									<option value="27" >Sulawesi Tenggara</option>
+									<option value="28" >Gorontalo</option>
+									<option value="29" >Sulawesi Barat</option>
+									<option value="30" >Maluku</option>
+									<option value="31" >Maluku Utara</option>
+									<option value="32" >Papua</option>
+									<option value="33" >N/A</option>
+									<option value="34" >Kalimantan Utara</option>
+									<option value="35" >Papua Barat</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-offset-2 col-sm-10">
+								<div class="checkbox">
+									<label>
+		          						<input type="checkbox" id="terms" name="terms"> I have read and accept the <a href="">Terms of Use</a>.
+		        					</label>
+								</div>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<div class="col-sm-offset-2 col-sm-7">
+								<button class="btn btn-primary" type="submit">Submit</button>
+								<button class="btn">Preview</button>
+							</div>
+						</div>
+						
+						
+					</div>
+					<div class="col-md-3">
+						<div class="col-sm-12">
+							<div class="form-group">
+								<label>Maybe from Source</label>
+								<input type="text" class="form-control" name="typesource" id="typesource">
+								<div class="col-sm-12"><small>E.g:newspaper,internet</small></div>
+							</div>
+						</div>
+						<div class="col-sm-12">
+							<div class="form-group">
+								<label>By</label>
+								<input type="text" class="form-control" name="origin" id="origin">
+							</div>
+						</div>
+						<div class="col-sm-12">
+							<div class="form-group">
+								<label>Created Date</label>
+								<div class="input-group date" id="datetimepicker3" style="margin-top: 5px;" data-date-format="DD-MM-YYYY HH:mm:ss">
+								    <input type="text" class="form-control" name="createdDate" value="<?php echo date('d-m-Y H:i:s'); ?>">
+								    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-12">
+							<div class="form-group">
+								<label>Published Date</label>
+								<div class="input-group date" id="datetimepicker1" style="margin-top: 5px;" data-date-format="DD-MM-YYYY HH:mm:ss">
+								    <input type="text" class="form-control" name="publishedDate" value="<?php echo date('d-m-Y H:i:s'); ?>">
+								    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-12">
+							<div class="form-group">
+								<label>Expired Date</label>
+								<div class="input-group date" id="datetimepicker2" style="margin-top: 5px;" data-date-format="DD-MM-YYYY HH:mm">
+								    <input type="text" class="form-control" name="expiredDate">
+								    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-12">
+							<div class="form-group">
+								<label>Status</label>
+								<?php echo $this->catalogStatus(); ?>
+							</div>
+						</div>
+						<div class="col-sm-12">
+							<div class="form-group">
+								<label>No. Sticky</label>
+	          					<input type="text" size="1" name="sticky" style="text-align:center">
+							</div>
+						</div>
+						<div class="col-sm-12">
+							<div class="form-group">
+								<div class="checkbox">
+									<label>
+										<input type="checkbox" name="allowComment"> Allow Comment
+									</label>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			
+		</div>
+	</div>
+</div>

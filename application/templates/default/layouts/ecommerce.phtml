@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=<?php echo $this->CHARSET; ?>" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+	<?php echo $this->headMeta(); ?>
+	<?php echo $this->headTitle(); ?>
+	<link rel="shortcut icon" type="image/x-icon" href="<?php echo $this->APP_STATIC_SERVER; ?>/skins/<?php echo $this->APP_TEMPLATE; ?>/<?php echo $this->APP_SKIN; ?>/img/w.ico" />
+	<!--Fonts-->
+    <link href='https://fonts.googleapis.com/css?family=Karla:400,400italic,700italic,700' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
+    
+	<?php 
+	$this->headLink()
+		->prependStylesheet($this->APP_STATIC_SERVER . '/skins/' . $this->APP_TEMPLATE . '/' . $this->APP_SKIN . '/css/style.css')
+		->prependStylesheet($this->APP_STATIC_SERVER . '/skins/' . $this->APP_TEMPLATE . '/' . $this->APP_SKIN . '/css/font-awesome.min.css')
+		->prependStylesheet($this->APP_STATIC_SERVER . '/skins/' . $this->APP_TEMPLATE . '/' . $this->APP_SKIN . '/css/bootstrap-theme.min.css')
+		->prependStylesheet($this->APP_STATIC_SERVER . '/skins/' . $this->APP_TEMPLATE . '/' . $this->APP_SKIN . '/css/bootstrap.min.css');
+	
+	$this->headScript()
+		->prependFile($this->APP_STATIC_SERVER . '/skins/' . $this->APP_TEMPLATE . '/' . $this->APP_SKIN . '/js/bootstrap.min.js')
+		->prependFile($this->APP_STATIC_SERVER . '/js/jquery/jquery.min.js');
+	?>
+	
+	<?php
+    /**
+     * Compress CSS and JS if it is enabled
+     */ 
+    echo $this->compressor('css');
+    echo $this->compressor('js');
+    ?>
+	
+	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="<?php echo $this->APP_STATIC_SERVER; ?>/skins/<?php echo $this->APP_TEMPLATE; ?>/<?php echo $this->APP_SKIN; ?>/js/html5shiv.min.js"></script>
+      <script src="<?php echo $this->APP_STATIC_SERVER; ?>/skins/<?php echo $this->APP_TEMPLATE; ?>/<?php echo $this->APP_SKIN; ?>/js/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+	<?php echo $this->render('_navigationcomm.phtml'); ?>
+</body>
+</html>

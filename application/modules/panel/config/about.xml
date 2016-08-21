@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module SYSTEM "http://schemas.madaniyah.com/dtd/module_about.dtd">
+<module>
+	<name>panel</name>
+	<description langKey="about_panel_description"><![CDATA[Panel module]]></description>
+	<thumbnail></thumbnail>
+	<author>Nihki Prihadi</author>
+	<email>nihki@madaniyah.com</email>
+	<version>1.4</version>
+	<license>free</license>
+</module>

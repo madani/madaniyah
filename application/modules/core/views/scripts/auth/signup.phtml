@@ -1,0 +1,90 @@
+<?php 
+$this->headTitle('Sign up');
+
+?>
+<div class="row">
+	<div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
+		<div class="panel panel-info">
+			<div class="panel-heading">
+                <div class="panel-title">Sign up</div>
+            </div>
+            <div class="panel-body">
+            	<?php $auth = Zend_Auth::getInstance(); ?>
+            	<?php if ($auth->hasIdentity()) : ?>
+            	<div><?= sprintf('You already signed in as %s. If you want to use other account, please <a href="%s">sign out</a>.', '<span class="label label-info">' . implode(' ', [$auth->getIdentity()->first_name, $auth->getIdentity()->last_name]) . '</span>', $this->url([],'core_auth_logout')); ?></div>
+            	<?php else : ?>
+            	
+            	<?= $this->flashMessenger(); ?>
+            	
+            	<p><?= sprintf('If you already have account, please <a href="%s">sign in</a>', $this->url([],'core_auth_login') . ($this->continue ? '?' . http_build_query(['continue' => $this->continue]) : '')); ?></p>
+            	
+            	<form action="<?= $this->url([],'core_auth_signup') . ($this->queryString ? '?' . $this->queryString : ''); ?>" method="post">
+            		<div class="row">
+						<div class="col-xs-12 col-sm-6 col-md-6">
+		                    <div class="form-group">
+		                    	<input type="text" name="first_name" id="first_name" class="form-control" placeholder="First Name" tabindex="1">
+		                    </div>
+	                    </div>
+						<div class="col-xs-12 col-sm-6 col-md-6">
+		                    <div class="form-group">
+		                    	<input type="text" name="last_name" id="last_name" class="form-control" placeholder="Last Name" tabindex="2">
+		                    </div>
+	                    </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="username" id="userName" placeholder="Username" />
+                        <p id="userNameValidator" class="help-block alert alert-danger" style="display: none;"></p>
+                    </div>
+                    
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="email" id="email" placeholder="Email" />
+                        <p id="emailValidator" class="help-block alert alert-danger" style="display: none;"></p>
+                    </div>
+                    
+                    <div class="form-group">
+                        <input type="password" name="password" class="form-control" placeholder="Password" />
+                    </div>
+                    
+                    <div class="form-group">
+                        <input name="birthdate" type="text"  class="form-control" placeholder="Birthday (E.g: 17/07/1997)" id="datetimepicker1" style="margin-bottom: 10px;" data-date-format="DD/MM/YYYY">
+                    </div>
+                    
+                    <div class="radio-inline">
+			            <label>
+			                <input type="radio" name="sex" id="male" value="male">
+			                Laki-laki
+			            </label>
+			        </div>
+			        
+			        <div class="radio-inline">
+			            <label>
+			                <input type="radio" name="sex" id="female" value="female">
+			                Perempuan
+			            </label>
+			        </div>
+			        
+			        <div class="radio-inline">
+			            <label>
+			                <input type="radio" name="sex" id="other" value="other">
+			                Lainnya
+			            </label>
+			        </div>
+			        
+			        <hr>
+			        
+			        <div class="form-group">
+						<?php echo $this->locationSelect(); ?>
+					</div>
+					
+			        <hr>
+			        
+			        <button type="submit" id="signupButton" class="btn btn-primary" disabled>Sign up</button>
+					
+            	</form>	
+            	<?php endif; ?>
+            </div>
+		</div>
+	</div>
+	
+</div>

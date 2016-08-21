@@ -1,0 +1,16 @@
+<?php if (count($this->data) > 0) : ?>
+<p class="text-muted" style="text-transform: uppercase;">Related</p>
+<ul class="list-unstyled  related-list-thumbs row">
+<?php foreach ($this->data as $data) : ?>
+<li class="col-lg-3 col-sm-4 col-xs-6">
+	<a href="<?php echo $this->url(['slug'=>$data->slug],'news_article_details'); ?>" title="<?php echo $data->title; ?>">
+		<?php if (isset($data->fields['images'][0]['square']['url']) && !empty($data->fields['images'][0]['square']['url'])) : ?>
+		<img src="<?php echo $data->fields['images'][0]['square']['url']; ?>" class="img-responsive" height="130px">
+		<?php endif; ?>
+		<h2><?php echo $data->title; ?></h2>
+		<span class="capcat text-muted">In "<?php echo $data->fields['category'][0]['name'] ?>"</span>
+	</a>
+</li>
+<?php endforeach; ?>
+</ul>
+<?php endif; ?>

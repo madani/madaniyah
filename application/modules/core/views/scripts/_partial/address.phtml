@@ -1,0 +1,68 @@
+<div class="form-group">
+    <label class="col-sm-2 control-label">Country</label>
+    <div class="col-sm-3">
+        <select name="country" class="form-control">
+        <?php foreach($this->countries as $code => $name) : ?>
+            <option value="<?= $code; ?>" <?php if ($code == $this->address['country']) : ?>selected<?php endif; ?>><?= $name; ?></option>
+        <?php endforeach; ?>
+        </select>
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-2 control-label">Street</label>
+    <div class="col-sm-4">
+        <input type="text" name="street1" class="form-control" value="<?= $this->escape($this->address['street1']); ?>" placeholder="Street line 1" />
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="col-sm-4 col-sm-offset-2">
+        <input type="text" name="street2" class="form-control" value="<?= $this->escape($this->address['street2']); ?>" placeholder="Street line 2" />
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-2 control-label">City</label>
+    <div class="col-sm-3">
+        <input type="text" name="city" class="form-control" value="<?= $this->escape($this->address['city']); ?>" />
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-2 control-label">State/Province</label>
+    <div class="col-sm-3">
+        <input type="text" name="state" data-country="" class="form-control" value="<?= $this->escape($this->address['state']); ?>" />
+        <select name="state" data-country="US" class="form-control hide" disabled>
+            <?php foreach ($this->usStates as $code => $name) : ?>
+                <option value="<?= $code; ?>" <?php if ($code == $this->address['state']) : ?>selected<?php endif; ?>><?= $name; ?></option>
+            <?php endforeach; ?>
+        </select>
+        <select name="state" data-country="CA" class="form-control hide" disabled>
+            <?php foreach ($this->canadaProvinces as $code => $name) : ?>
+                <option value="<?= $code; ?>" <?php if ($code == $this->address['state']) : ?>selected<?php endif; ?>><?= $name; ?></option>
+            <?php endforeach; ?>
+        </select>
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-2 control-label">Zip code</label>
+    <div class="col-sm-3">
+        <input type="text" name="zip_code" class="form-control" value="<?= $this->escape($this->address['zip_code']); ?>" />
+    </div>
+</div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+    // Show the US states or Canada provinces when user choose one of these countries
+    $('select[name="country"]').on('change', function() {
+        var country = $(this).val();
+        if (['US', 'CA'].indexOf(country) == -1) {
+            country = '';
+        }
+        $('[name="state"]').removeClass('show').addClass('hide').attr('disabled', 'disabled')
+                           .filter('[data-country="' + country + '"]').addClass('show').removeAttr('disabled');
+    });
+});
+</script>

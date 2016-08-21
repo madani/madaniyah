@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+/**
+ * Pandamp
+ * 
+ * @author		2011-2018 Nihki Prihadi
+ * @version		$Id: about.xml 1 2013-10-21 09:41Z $
+ */
+-->
+<!DOCTYPE module SYSTEM "http://schemas.madaniyah.com/dtd/module_about.dtd">
+<module>
+	<name>dev</name>
+	<description langKey="about_dev_description"><![CDATA[Dev module]]></description>
+	<thumbnail></thumbnail>
+	<author>Nihki Prihadi</author>
+	<email>nihki@madaniyah.com</email>
+	<version>1.3</version>
+	<license>free</license>
+</module>

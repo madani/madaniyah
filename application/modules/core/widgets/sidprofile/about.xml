@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE widget SYSTEM "http://schemas.madaniyah.com/dtd/widget_about.dtd">
+<widget>
+	<name>sidprofile</name>
+	<title>Profile Kiri</title>
+	<module>core</module>
+	<description>Show profile on the left side</description>
+	<author>Nihki Prihadi</author>
+	<email>nihki@madaniyah.com</email>
+	<version>1.2</version>
+	<license>free</license>
+	<params></params>
+</widget>

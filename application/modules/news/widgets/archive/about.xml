@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE widget SYSTEM "http://schemas.madaniyah.com/dtd/widget_about.dtd">
+<widget>
+	<name>archive</name>
+	<title>Archive</title>
+	<module>news</module>
+	<description>Show list of archive</description>
+	<thumbnail></thumbnail>
+	<author>Nihki Prihadi</author>
+	<email>nihkiprihadi@gmail.com</email>
+	<version>1.0.0</version>
+	<license>free</license>
+</widget>

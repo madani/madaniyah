@@ -8,6 +8,9 @@
 			<widget module="news" name="category" load="php">
 				<title><![CDATA[Category]]></title>
 			</widget>
+			<widget module="news" name="archive" load="php">
+				<title><![CDATA[Archive]]></title>
+			</widget>
 			<widget module="news" name="praytime" load="php">
 				<title><![CDATA[PrayTime]]></title>
 			</widget>

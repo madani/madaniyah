@@ -1,0 +1,94 @@
+<?php
+$this->headScript()
+	->appendFile($this->APP_STATIC_SERVER . '/js/jquery/jquery.validate.min.js')
+	->appendFile($this->APP_STATIC_SERVER . '/js/pandamp/namespace.js')
+	->appendFile($this->APP_STATIC_SERVER . '/js/pandamp/util.js');
+
+$this->headScript()->appendScript(
+		'$(function() {
+    $.validator.addMethod(\'slug\', function(value) {
+		var regex = new RegExp(/^[a-z0-9\-]+$/);
+		if (value.match(regex)) {
+			return true;
+		} else {
+			return false;
+		}
+	});
+
+	$(\'#addCategoryForm\').validate({
+		rules: {
+			name: {
+				required: true,
+		  		maxlength: 255
+			},
+			slug: {
+		  		required: true,
+		  		slug: true,
+		  		maxlength: 255
+			}
+	    },
+	    messages: {
+	    	name: {
+	        	required: "The name is required",
+				maxlength: "The name does not have exceed 255 characters"
+			},
+			slug: {
+	        	required: "The slug is required",
+	        	slug: "The slug is invalid",
+	        	maxlength: "The slug does not have exceed 255 characters"
+	    	}
+		},
+		highlight: function(element) {
+            $(element).closest(\'.form-group\').addClass(\'has-error\');
+        },
+        unhighlight: function(element) {
+            $(element).closest(\'.form-group\').removeClass(\'has-error\');
+        },
+        errorElement: \'span\',
+        errorClass: \'help-block\',
+        errorPlacement: function(error, element) {
+            if(element.parent(\'.input-group\').length) {
+                error.insertAfter(element.parent());
+            } else {
+                error.insertAfter(element);
+            }
+        }
+	});
+
+	$(\'#name\').bind(\'change\', function() {
+		$(\'#slug\').val(Pandamp.Util.generateSlug($(this).val()));
+	});
+  });', 'text/javascript');
+?>
+<div class="row">
+	<div class="col-lg-6 col-lg-offset-3">
+		<div class="panel panel-default next-panel">
+			<div class="panel-heading">
+                <h3 class="panel-title">Category</h3>
+            </div>
+            
+            <div class="panel-body">
+            	<form method="post" action="" id="addCategoryForm" class="form-horizontal" role="form">
+            	<div class="form-group">
+					<label class="col-sm-2 control-label" for="title">Title</label>
+					<div class="col-sm-7">
+          				<input type="text" class="form-control" name="name" id="name" placeholder="" style="width:300px">
+          			</div>
+				</div>
+            	<div class="form-group">
+					<label class="col-sm-2 control-label" for="title">Slug</label>
+					<div class="col-sm-7">
+          				<input type="text" class="form-control" name="slug" id="slug" placeholder="" style="width:300px">
+          			</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-offset-2 col-sm-7">
+						<input type="hidden" id="node" name="node" value="<?php echo $this->currentNode; ?>">
+						<button class="btn btn-primary" type="submit">Submit</button>
+					</div>
+				</div>
+            	</form>
+            </div>
+		</div>
+	</div>
+</div>

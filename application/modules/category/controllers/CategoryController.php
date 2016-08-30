@@ -2,6 +2,38 @@
 use Pandamp\Utility\Formatting;
 class Category_CategoryController extends Zend_Controller_Action
 {
+	public function addAction()
+	{
+		$request = $this->getRequest();
+		$node = $request->getParam('node', 'root');
+		if ($request->isPost()) {
+			$title = $request->getPost('name');
+			$slug = $request->getPost('slug');
+			$node = $request->getPost('node');
+			$category = [
+				'_id' => uniqid('mp'),
+				'name' => $title,
+				'slug' => $slug,
+				'created_date' => new \MongoDate(),
+				'user_id' => Zend_Auth::getInstance()->getIdentity()->user_name,
+						
+			];
+			unset($category['_type']);
+			Category_Models_Category::insert($category);
+			if ($node == "root") {
+				$category['parent'] = $category['_id'];
+			}
+			else
+			{
+				$c = (new Category_Models_Category)->findById($node);
+				$category['path'] = $c->path.$c->_id.'/';
+				$category['parent'] = $node;
+			}
+			Category_Models_Category::update(['_id'=>$category['_id']], $category);
+		}
+		$this->view->assign('currentNode',$node);
+	}
+	
 	public function listAction()
 	{
 		$request = $this->getRequest();

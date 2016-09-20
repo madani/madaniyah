@@ -1,0 +1,10 @@
+<?php $article = $this->article; ?>
+<?php $this->headTitle($article->title); ?>
+<h3><?php echo $article->title; ?></h3>
+<p>
+	<?php echo $this->helperLoader('news')->dtoday(date('Y-m-d H:i:s', $article->date['publish']->sec)); ?>
+</p>
+<div style="padding-bottom: 20px"></div>
+<p>
+	<?php echo $article->content ?>
+</p>

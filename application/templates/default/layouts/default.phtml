@@ -52,8 +52,8 @@
 				<li><a href="<?php echo $this->APP_URL; ?>/sitemap">Site Map</a></li> 
 				<li><a href="<?php echo $this->APP_URL; ?>/privacy">Privacy Policy</a></li>
 				<li><a href="<?php echo $this->APP_URL; ?>/terms">Terms of Service</a></li>
-				<li><a href="<?php echo $this->APP_URL; ?>/aboutus">About Us</a></li>
-				<li><a href="<?php echo $this->APP_URL; ?>/contactus">Contact Us</a></li>
+				<li><a href="<?php echo $this->APP_URL; ?>/about">About</a></li>
+				<li><a href="<?php echo $this->APP_URL; ?>/contact">Contact</a></li>
 			</ul>
     		<p>&copy; 2008 - <?php echo date('Y') ?> madaniyah.</p>
     	</div>
@@ -245,48 +245,7 @@ $(function() {
    	});
     		
    	$('#back-to-top').tooltip('show');
-   	$('.form-inline > button').attr({'disabled':'disabled'});
-   	$('#name').keyup(function(){
-   		var inlineObj = $('.help-inline'),
-   		val = $(this).val(),
-   		group = $('.form-group.has-feedback');
-   		 
-   		if (val != '') {
-   			if (val.length < 5) {
-   				group.removeClass('has-success').addClass('has-error');
-   				inlineObj.css('color', '#a94442').text('Sorry, this name is not valid.');
-   				
-   				$('.form-inline > button').attr({'disabled':'disabled'});
-   			}
-   			else
-   			{
-				if( val.match(/^[a-zA-Z0-9-_]+$/) == null ) {
-                    group.removeClass('has-success').addClass('has-error');
-                    inlineObj.css('color', '#a94442').text('Sorry, this name is not valid.');
-                    
-                    $('.form-inline > button').attr({'disabled':'disabled'});
-                }
-                else {
-                	$.post('<?php echo $this->url([],'panel_site_check'); ?>',{'sitename':val},function(data){
-   						if (data.response==true) {
-   							group.removeClass('has-error').addClass('has-success');
-                    		inlineObj.css('color', '#3c763d').text('Oke this name valid.');
-                    		
-                    		$('.form-inline > button').removeAttr('disabled');
-   						}
-   					},'json');
-                    
-                }
-   			}
-   		}
-   		else
-   		{
-   			group.removeClass('has-error has-success');
-   			inlineObj.removeAttr('style').text('Enter your site name here');
-   			
-   			$('.form-inline > button').attr({'disabled':'disabled'});
-   		}
-   	});
+   	
    	
 	<?php if (Zend_Controller_Front::getInstance()->getRouter()->getCurrentRouteName()=='core_index_contactus') : ?>
 	var cDestination,
@@ -315,6 +274,12 @@ $(function() {
        	
 	<?php endif; ?>
    	
+	<?php if (Zend_Controller_Front::getInstance()->getRouter()->getCurrentRouteName()=='core_index_contact') : ?>
+	$('input').iCheck({
+		checkboxClass: 'icheckbox_square-blue',
+		increaseArea: '20%' // optional
+	});
+	<?php endif; ?>
 	
 });
 
@@ -401,6 +366,7 @@ tinyMCE.init({
 	}
 });
 <?php endif; ?>
+
 
 
 

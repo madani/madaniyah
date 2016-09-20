@@ -44,6 +44,9 @@ $this->headStyle()->appendStyle('
 								<select class="form-control" id="type" name="type">
 									<option value="">---</option>
 									<option value="article"<?php if ('article' == $article->type) : ?> selected="selected"<?php endif; ?>>Article</option>
+									<option value="about"<?php if ('about' == $article->type) : ?> selected="selected"<?php endif; ?>>About</option>
+									<option value="terms"<?php if ('terms' == $article->type) : ?> selected="selected"<?php endif; ?>>Terms of Service</option>
+									<option value="policy"<?php if ('policy' == $article->type) : ?> selected="selected"<?php endif; ?>>Privacy Policy</option>
 									<option value="buy"<?php if ('buy' == $article->type) : ?> selected="selected"<?php endif; ?>>Dibeli</option>
 									<option value="sell"<?php if ('sell' == $article->type) : ?> selected="selected"<?php endif; ?>>Dijual</option>
 									<option value="rent"<?php if ('rent' == $article->type) : ?> selected="selected"<?php endif; ?>>Disewa</option>

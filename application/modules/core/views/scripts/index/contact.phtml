@@ -1,0 +1,55 @@
+<?php echo $this->headTitle('Contact'); ?>
+<?php 
+	$this->headLink()
+		->appendStylesheet($this->APP_STATIC_SERVER . '/skins/' . $this->APP_TEMPLATE . '/' . $this->APP_SKIN . '/css/blue.css');
+
+	$this->headScript()
+		->appendFile($this->APP_STATIC_SERVER . '/js/icheck.min.js')
+		->appendFile($this->APP_STATIC_SERVER . '/js/parsley.min.js')
+		->appendFile($this->APP_STATIC_SERVER . '/js/jquery.easydropdown.min.js');
+
+?>
+<div class="row reset">
+	<div class="col-sm-6 col-sm-offset-3 contact-column">
+		<h3 class="blue">I'd love to work with you.</h3>
+		<a href="mailto:hello@madaniyah.com" target="_top"><p class="contact-email regular">hello@madaniyah.com</p></a>
+	</div>
+</div>
+<div class="row grey-background-page" style="margin-bottom: 50px;">
+	<div class="col-sm-6 col-sm-offset-3 contact-column-form">
+		<form method="post" id="mycontact_form" data-parsley-validate>
+			<h3 class="blue">What can i help you with</h3>
+			<div class="form-group">
+				<select id="services" name="mycontact_services" class="madaniyah-dropdown services" required data-parsley-required-message="Services required">
+		            <option value="" class="label">Select Services</option>
+		            <option value="Inquiry to Web Design & Development">Web Design & Development</option>
+		            <option value="Inquiry to Mobile Application">Mobile Application</option>
+		            <option value="Inquiry to Web Application">Web Application</option>
+		            <option value="Inquiry to Communication Design">Communication Design</option>
+		            <option value="Inquiry to Brand Identity Design">Brand Identity Design</option>
+		            <option value="Inquiry to Graphic Design">Graphic Design</option>
+		            <option value="Inquiry to Other">Other</option>
+        		</select>
+			</div>
+			<div class="form-group">
+        		<input id="name" type="text" name="mycontact_name"  value="" class="name form-control" required data-parsley-required-message="Name required" placeholder="Your Name" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Your Name'" />
+        	</div>
+
+        	<div class="form-group">
+        		<input id="email" type="email" name="mycontact_email"  value="" class="email form-control" data-parsley-type="email"  required data-parsley-required-message="Email required" placeholder="Email Address" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Email Address'"/>
+        	</div>
+  
+	        <div class="form-group">
+    		    <textarea id="message" rows="6" name="mycontact_body" class="message form-control"  required data-parsley-required-message="Message required" placeholder="Your Message" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Your Message'"></textarea>
+        	</div>
+
+        	<div class="checkbox">
+          		<label class="checkbox">
+            		<input type="checkbox" id="imnotarobot" name="imnotarobot">  Check if you are not a robot          
+            	</label>
+        	</div>
+
+    		<input type="submit" id="send_message"  value="SEND MESSAGE" name="contact_submit" class="btn btn-info"/>
+		</form>
+	</div>
+</div>

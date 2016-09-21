@@ -80,6 +80,7 @@ class Core_IndexController extends Zend_Controller_Action
 				$auth = Zend_Auth::getInstance();
 				if ($auth->hasIdentity())
 				{
+					$auth = $auth->getIdentity();
 					$data->author = [
 						'id' => (string) $auth['_id']->{'$id'},
 						'name' => implode(' ', [$auth->first_name, $auth->last_name]),

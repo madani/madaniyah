@@ -1,14 +1,14 @@
 <?php
 class News_View_Helper_Category extends Zend_View_Helper_Abstract
 {
-	public function category($slug=null, $isCount=FALSE)
+	public function category($slug=null, $isCount=FALSE, $showCount=TRUE)
 	{
-		$category = $this->_traverseFolder('root','',0,$slug,$isCount);
+		$category = $this->_traverseFolder('root','',0,$slug,$isCount,$showCount);
 		
 		return $category;
 	}
 	
-	protected function _traverseFolder($folderGuid, $sGuid, $level, $slug, $isCount=FALSE)
+	protected function _traverseFolder($folderGuid, $sGuid, $level, $slug, $isCount=FALSE, $showCount=TRUE)
 	{
 		$rowSet = (new Category_Models_Category)->fetchChildren($folderGuid);
 		$sGuid = '';
@@ -20,12 +20,15 @@ class News_View_Helper_Category extends Zend_View_Helper_Abstract
 			else 
 				if (self::getCountPost($row['_id'])) {
 					$badge = ($isCount) ? ' <span class="badge">'.self::getCountPost($row['_id']).'</span>' : '';
+					if (isset($badge)) {
+						if (!$showCount) $badge='';
+					}
 					$option = '<li'.$ss.'><a href="'.$this->view->url(['slug'=>$row['slug']],'category_category_detail').'">'.$row['name'].$badge.'</a></li>';
 				}
 				else
 					$option = '';
 			
-			$sGuid .= $option . $this->_traverseFolder($row['_id'], '', $level+1, $slug, $isCount);
+			$sGuid .= $option . $this->_traverseFolder($row['_id'], '', $level+1, $slug, $isCount, $showCount);
 		}
 			
 		return $sGuid;

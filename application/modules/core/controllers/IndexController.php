@@ -88,6 +88,8 @@ class Core_IndexController extends Zend_Controller_Action
 					];
 				}
 				
+				unset($data->_type);
+				
 				News_Models_Post::insert($data->export());
 			}
 		}
